@@ -9,7 +9,9 @@ import { StudentDocument } from '../../schemas/student.shema';
 export class ListStudentsFromClassByIdMongooseAdapter implements ListStudentsFromClassByIdPort {
   constructor(private readonly StudentModel: Model<StudentDocument>) {}
 
-  async execute({ classId }: ListStudentsFromClassByIdPortInput): Promise<ListStudentsFromClassByIdPortResult> {
+  async execute({ 
+    classId,
+  }: ListStudentsFromClassByIdPortInput): Promise<ListStudentsFromClassByIdPortResult> {
     const students = (await this.StudentModel.find<StudentDocument>({ classCodeList: { $in: [classId] } })
       .lean()
       .exec()) as StudentDocument[];
@@ -18,7 +20,12 @@ export class ListStudentsFromClassByIdMongooseAdapter implements ListStudentsFro
   }
 
   private mapStudentsToModel(studentDocumentList: StudentDocument[]): ListStudentsFromClassByIdPortResult {
-    console.log('studentDocumentList', studentDocumentList);
-    return [];
+    //console.log('studentDocumentList', studentDocumentList);
+    return studentDocumentList.map((studentDocument) => ({
+      name: studentDocument.name,
+      id: studentDocument.id,
+      status: studentDocument.status,
+      classCodeList: studentDocument.classCodeList,
+    }));
   }
 }

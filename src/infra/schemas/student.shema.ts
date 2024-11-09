@@ -19,4 +19,4 @@ export class Student {
 export type StudentDocument = HydratedDocument<Student>;
 export const StudentSchema = SchemaFactory.createForClass(Student);
 
-StudentSchema.index({ id: 1 });
+StudentSchema.index({ id: 1});
